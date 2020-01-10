@@ -59,7 +59,8 @@ int main() {
 	printf("Enter words:\n");
   	scanf ("%[^\n]%*c", input);
 		//MAKE FUNC OUT OF THIS CARP
-	int j=0;
+	int j=0;	
+	//clean the input and validting it.
 	for(int i=0;i<9090;i++) {
 			if(input[i]>96 && input[i]<123) { 
 			fixed[j]=input[i];
@@ -76,12 +77,16 @@ int main() {
     	size_t n = string_parser( fixed, &word_array );
 
    	//for ( size_t i = 0; i < n; i++ ) puts( word_array[i] ); //prints the array 
+	//cut the array to strings and each string to chars.
+	//each char goes into the trie 
 	for(int i=0;i<n;i++) {
 		char *a = word_array[i];
 	
 		for(int i=0;i<strlen(a);i++) {
 			char b = a[i];
 			printf("%c\n",b);
+			//HERE: SEND EACH CHAR TO THE TRIE
+			//LET ALEX DO HIS MAGIC
 		}
 	}
     	for ( size_t i = 0; i < n; i++ ) free( word_array[i] );
