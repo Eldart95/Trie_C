@@ -54,28 +54,50 @@ size_t string_parser( const char *input, char ***word_array) {
 
 int main() {
 	char ** word_array = NULL;
-	char input[9090];
-	char fixed[9090]; //NEED TO BE DYNAMICLLY ALLOCATED
+	char* input=NULL;
+	char c;
+	input = (char*)malloc(sizeof(char));
+	
+	
 	printf("Enter words:\n");
-  	scanf ("%[^\n]%*c", input);
+	int i=0; int k=1;
+ 	 while (c != '\n' ) {
+    // read the input from keyboard standard input
+   	 c = getc(stdin);
+	
+    // re-allocate (resize) memory for character read to be stored
+   	 input = (char*)realloc(input, k * sizeof(char));
+
+    // store read character by making pointer point to c
+   	 input[i] = c;
+	
+  	  i++;
+  	  k++;
+  }
+	
+  	input[i] = '\0'; 
+	
+	
 		//MAKE FUNC OUT OF THIS CARP
 	int j=0;	
 	//clean the input and validting it.
-	for(int i=0;i<9090;i++) {
+	for(int i=0;i<strlen(input);i++) {
+			if(input[i]=='\0' || input[i]=='\n') break;
 			if(input[i]>96 && input[i]<123) { 
-			fixed[j]=input[i];
+			input[j]=input[i];
                         j++; }
 			if(input[i]>64 && input[i]<91)  {
-			fixed[j]=input[i]+32;
+			input[j]=input[i]+32;
 			j++; }
 			if(input[i]==' ') { 
-			fixed[j] = ' ';
+			input[j] = ' ';
 			j++; }		
 	}
+	input[j]='\0';
 	
 	
-    	size_t n = string_parser( fixed, &word_array );
-
+    	size_t n = string_parser( input, &word_array );
+	 free(input);
    	//for ( size_t i = 0; i < n; i++ ) puts( word_array[i] ); //prints the array 
 	//cut the array to strings and each string to chars.
 	//each char goes into the trie 
