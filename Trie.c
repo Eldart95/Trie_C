@@ -1,4 +1,4 @@
-#include <stadio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -10,52 +10,62 @@
 #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
 
 typedef enum{FALSE=0, TRUE=1}boolean;
-int drop(const char* key);
+int drop(char* key);
 
 typedef struct node{
 char letter;
 long unsigned int count;
 struct node* children[ALPHABET_SIZE];
-bool isEndOfWord;
+_Bool isEndOfWord;
 }node;
 
 ///Initialized to NULLs 
 node *getNode() 
 {	
+	
 	node *getNode;
-    getNode = malloc(sizeof(node));
+    getNode = (node*) malloc(100*sizeof(node));
+	if(getNode==NULL) exit(1);
+	
 	getNode->isEndOfWord = false;
     int i = 0;
     while(i<ALPHABET_SIZE){
         getNode->children[i] = NULL;
         i++;
+	
     }
+	
     return getNode; 
 }
 
 //if its not present , inserts key into trie
 //if the key is present , just marks leaf node
-void insert(struct node *root, const char *key){
+void insert(struct node *root, char *key){
+	
 	int level;
 	int length = strlen(key);
 	int index;
-
+	
 	struct node *p = root;
-
+	
 	for(level = 0;level < length ; level++ ){
+	
 		index = CHAR_TO_INDEX(key[level]);
+	
 			if(!p->children[index]){
+	
 				p->children[index] = getNode();
 			}
 		p = p->children[index];
 	}
+	
 	//marks last node as leaf
 	p->isEndOfWord = 1;
-	count++;
+	p->count++;
 }
 
 //checks if the word is in the trie or not
-bool search(struct node *root, const char *key){
+_Bool search(struct node *root, char *key){
 	int level;
 	int length = strlen(key);
 	int index;
@@ -70,7 +80,7 @@ bool search(struct node *root, const char *key){
 		p = p->children[index];
 
 	}
-	return (p ! = NULL && p->isEndOfWord);
+	return (p != NULL && p->isEndOfWord);
 	
 }
 

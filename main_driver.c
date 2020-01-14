@@ -2,6 +2,15 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include "Trie.h"
+
+#include <stdbool.h>
+
+
+
+
+
+
 
 //prases the string and makes an array of VALID strings
 size_t string_parser( const char *input, char ***word_array) {
@@ -52,7 +61,19 @@ size_t string_parser( const char *input, char ***word_array) {
 
 
 
-int main() {
+int main(int argc, char* argv[]) {
+	node* root=NULL;
+	root=getNode();
+	if(root == NULL) exit(1);
+	if(argc==2) { 
+	char T = *argv[1];
+	//printf("%s",a);
+	} 
+	if(argc>2) {
+	printf("Error");
+	exit(1);
+	}
+	
 	char ** word_array = NULL;
 	char* input=NULL;
 	char c;
@@ -105,15 +126,21 @@ int main() {
 		char *a = word_array[i];
 	
 		for(int i=0;i<strlen(a);i++) {
+			
 			char b = a[i];
-			printf("%c\n",b);
+			//printf("%c\n",b);
 			//HERE: SEND EACH CHAR TO THE TRIE
 			//LET ALEX DO HIS MAGIC
+			
+			insert(*root,&b);
+			
+			
 		}
 	}
+	//printWord(*word_array,n);
     	for ( size_t i = 0; i < n; i++ ) free( word_array[i] );
     	free( word_array );
-
+	free(root);
 
 	
 
