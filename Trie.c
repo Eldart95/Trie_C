@@ -35,7 +35,7 @@ struct node *getNode(void){
 
 //if its not present , inserts key into trie
 //if the key is present , just marks leaf node
-void insert(struct node *root , const char* key){
+void insert(struct node *root, const char *key){
 	int level;
 	int length = strlen(key);
 	int index;
@@ -50,7 +50,8 @@ void insert(struct node *root , const char* key){
 		p = p->children[index];
 	}
 	//marks last node as leaf
-	p->isEndOfWork = 1;
+	p->isEndOfWord = 1;
+	count++;
 }
 
 //checks if the word is in the trie or not
@@ -67,7 +68,17 @@ bool search(struct node *root, const char *key){
 				return 0;
 			}
 		p = p->children[index];
+
 	}
 	return (p ! = NULL && p->isEndOfWord);
 	
+}
+
+//prints the word that we are looking for
+void printWord(char cahrs[],int len, int count){
+	for(int i =0; i<len ;i++){
+		printf("%c",i);
+	}
+	printf("%d ", count);
+	printf("\n");
 }
