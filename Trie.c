@@ -20,18 +20,18 @@ bool isEndOfWord;
 }node;
 
 ///Initialized to NULLs 
-struct node *getNode(void){
-	struct node *pNode = NULL;
-	pNode = (struct node *)malloc(sizeof(struct node));
-	
-	if(pNode){
-	int i;
-	pNode->isEndOfWord = 0;
-		for(i=0; i<ALPHABET_SIZE; I++){
-			pNode->cilderen[i] = NULL;
-		}
-	}
-	return pNode;
+node *getNode() 
+{	
+	node *getNode;
+    getNode = malloc(sizeof(node));
+	getNode->isEndOfWord = false;
+    int i = 0;
+    while(i<ALPHABET_SIZE){
+        getNode->children[i] = NULL;
+        i++;
+    }
+    return getNode; 
+}
 
 //if its not present , inserts key into trie
 //if the key is present , just marks leaf node
