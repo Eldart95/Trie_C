@@ -54,52 +54,7 @@ size_t string_parser( const char *input, char ***word_array) {
 
     return n;
 }  
-
-		
-
-
-
-
-
-int main(int argc, char* argv[]) {
-	node* root=NULL;
-	root=getNode();
-	if(root == NULL) exit(1);
-	if(argc==2) { 
-	char T = *argv[1];
-	//printf("%s",a);
-	} 
-	if(argc>2) {
-	printf("Error");
-	exit(1);
-	}
-	
-	char ** word_array = NULL;
-	char* input=NULL;
-	char c;
-	input = (char*)malloc(sizeof(char));
-	
-	
-	printf("Enter words:\n");
-	int i=0; int k=1;
- 	 while (c != '\n' ) {
-    // read the input from keyboard standard input
-   	 c = getc(stdin);
-	
-    // re-allocate (resize) memory for character read to be stored
-   	 input = (char*)realloc(input, k * sizeof(char));
-
-    // store read character by making pointer point to c
-   	 input[i] = c;
-	
-  	  i++;
-  	  k++;
-  }
-	
-  	input[i] = '\0'; 
-	
-	
-		//MAKE FUNC OUT OF THIS CARP
+void cleaner(char* input){
 	int j=0;	
 	//clean the input and validting it.
 	for(int i=0;i<strlen(input);i++) {
@@ -115,32 +70,85 @@ int main(int argc, char* argv[]) {
 			j++; }		
 	}
 	input[j]='\0';
+}
+		
+
+
+
+
+
+int main(int argc, char* argv[]) {
+	//inir trie.
+	struct TrieNode *root = getNode();
+	if(root == NULL) exit(1); 
+
+	//init strings that will help us deal with invalid chars.
+	char ** word_array = NULL;
+	char* input=NULL;
+	char c;
+	input = (char*)malloc(sizeof(char));
 	
 	
+	//printf("Enter words:\n");
+	int i=0; 
+	int k=1;
+ 	while (c != '\n' ) {
+ 		c = getc(stdin);
+    	 	//realloc memory as string gets longer and longer.
+   	 	input = (char*)realloc(input, k * sizeof(char));
+   	 	input[i] = c;
+	
+  	  	i++;
+  	  	k++;
+  	}
+	//ends and makes the string a string.
+  	input[i] = '\0'; 
+	
+	//cleans the input from invalid chars.
+	cleaner(input);	
+	
+	//puts the input in a word array.
     	size_t n = string_parser( input, &word_array );
-	 free(input);
-   	//for ( size_t i = 0; i < n; i++ ) puts( word_array[i] ); //prints the array 
-	//cut the array to strings and each string to chars.
-	//each char goes into the trie 
+    	
+    	//as we dont need the input anymore- we release the memory.
+	free(input);
+   	
+   	//for ( size_t i = 0; i < n; i++ ) puts( word_array[i] ); 
+	
+	//each word in the array is inserted to the trie.
 	for(int i=0;i<n;i++) {
 		char *a = word_array[i];
-	
-		for(int i=0;i<strlen(a);i++) {
-			
-			char b = a[i];
-			//printf("%c\n",b);
-			//HERE: SEND EACH CHAR TO THE TRIE
-			//LET ALEX DO HIS MAGIC
-			
-			insert(*root,&b);
-			
-			
-		}
+		insert(root,a);
+
 	}
-	//printWord(*word_array,n);
+	
+	//if there is a parameter 'r' , we print the words that the trie contanins in reverse.	
+	if(argc==2) { 
+		if(*argv[1]=='r') {
+		int level=0;
+		char show[n];
+		displayR(root,show,level);
+		}
+		else exit(1);
+		
+	} 
+	
+	//else we print the word that the trie contains normally.
+	else {
+		int level = 0;
+		char show[n];
+		display(root,show,level);	
+		
+			
+	
+	}
+	
+	printf("\n");
+	
+	//now all that is left is to clean the memory we used.
     	for ( size_t i = 0; i < n; i++ ) free( word_array[i] );
     	free( word_array );
-	free(root);
+	freeALL(root);
 
 	
 
