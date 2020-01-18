@@ -17,35 +17,29 @@ size_t string_parser( const char *input, char ***word_array) {
     size_t n = 0;
     const char *p = input;
 
-    while ( *p ) {
-        while ( isspace( ( unsigned char )*p ) ) ++p;
+    while(*p) {
+        while(isspace((unsigned char)*p)) ++p;
         n += *p != '\0';
-        while ( *p && !isspace( ( unsigned char )*p ) ) ++p;
+        while(*p && !isspace((unsigned char)*p)) ++p;
     }
 
-    if ( n ) {
+    if (n) {
         size_t i = 0;
-
-        *word_array = malloc( n * sizeof( char * ) ); 
-
+        *word_array = malloc(n*sizeof(char *)); 
         p = input;
+        while (*p) {
+            while(isspace((unsigned char)*p)) ++p;
+            if (*p)  {
 
-        while ( *p ) {
-            while ( isspace( ( unsigned char )*p ) ) ++p;
-            if ( *p )  {
-		
-		
-		
-		
                 const char *q = p;
-                while ( *p && !isspace( ( unsigned char )*p ) ) ++p;
+                while(*p && !isspace((unsigned char)*p)) ++p;
 
                 size_t length = p - q;
 
-                ( *word_array )[i] = ( char * )malloc( length + 1 );
+                (*word_array)[i] = (char *)malloc(length + 1);
 		
-                strncpy( ( *word_array )[i], q, length );
-                ( *word_array )[i][length] = '\0';
+                strncpy((*word_array)[i],q,length);
+                (*word_array)[i][length] = '\0';
 
                 ++i;
             }
@@ -58,27 +52,29 @@ void cleaner(char* input){
 	int j=0;	
 	//clean the input and validting it.
 	for(int i=0;i<strlen(input);i++) {
-			if(input[i]=='\0' || input[i]=='\n') break;
+			if(input[i]=='\0') break;
+			if(input[i]=='\n') {
+				input[j]='\n';
+				j++;
+			}	
 			if(input[i]>96 && input[i]<123) { 
-			input[j]=input[i];
-                        j++; }
+				input[j]=input[i];
+                        	j++; 
+                        }
 			if(input[i]>64 && input[i]<91)  {
-			input[j]=input[i]+32;
-			j++; }
+				input[j]=input[i]+32;
+				j++; 
+			}
 			if(input[i]==' ') { 
-			input[j] = ' ';
-			j++; }		
+				input[j] = ' ';
+				j++; 
+			}		
 	}
 	input[j]='\0';
 }
-		
-
-
-
-
 
 int main(int argc, char* argv[]) {
-	//inir trie.
+	//init trie.
 	struct TrieNode *root = getNode();
 	if(root == NULL) exit(1); 
 
@@ -92,15 +88,18 @@ int main(int argc, char* argv[]) {
 	//printf("Enter words:\n");
 	int i=0; 
 	int k=1;
- 	while (c != '\n' ) {
- 		c = getc(stdin);
+	
+ 	while((c = fgetc(stdin)) != EOF) {
     	 	//realloc memory as string gets longer and longer.
-   	 	input = (char*)realloc(input, k * sizeof(char));
+   	 	input = (char*)realloc(input, k+ sizeof(char));
    	 	input[i] = c;
 	
   	  	i++;
   	  	k++;
+  	  	
   	}
+  	
+
 	//ends and makes the string a string.
   	input[i] = '\0'; 
 	
@@ -108,7 +107,7 @@ int main(int argc, char* argv[]) {
 	cleaner(input);	
 	
 	//puts the input in a word array.
-    	size_t n = string_parser( input, &word_array );
+    	size_t n = string_parser(input, &word_array);
     	
     	//as we dont need the input anymore- we release the memory.
 	free(input);
@@ -122,31 +121,14 @@ int main(int argc, char* argv[]) {
 
 	}
 	
-	//if there is a parameter 'r' , we print the words that the trie contanins in reverse.	
-	if(argc==2) { 
-		if(*argv[1]=='r') {
-		int level=0;
-		char show[n];
-		displayR(root,show,level);
-		}
-		else exit(1);
-		
-	} 
-	
-	//else we print the word that the trie contains normally.
-	else {
-		int level = 0;
-		char show[n];
-		display(root,show,level);	
-		
-			
-	
-	}
-	
+	int l=0;
+	char temp[n];
+	if(argc!=2) display(root,temp,l);
+	if(argc==2 && *argv[1]=='r') displayR(root,temp,l);
 	printf("\n");
 	
 	//now all that is left is to clean the memory we used.
-    	for ( size_t i = 0; i < n; i++ ) free( word_array[i] );
+    	for ( size_t i = 0; i < n; i++ ) free ( word_array[i] );
     	free( word_array );
 	freeALL(root);
 

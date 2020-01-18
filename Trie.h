@@ -7,7 +7,7 @@
 #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
 
 
-struct TrieNode* getNode(void);
+struct TrieNode* getNode();
 
 void insert(struct TrieNode *root,char *key);
 _Bool search(struct TrieNode *root,char *key);
